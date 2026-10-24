@@ -17,6 +17,11 @@ export function AuthProvider({ children }) {
     setAdmin(data.admin)
   }
   const logout = () => { localStorage.removeItem('ars_admin_token'); setAdmin(null) }
-  return <AuthContext.Provider value={{ admin, loading, login, logout }}>{children}</AuthContext.Provider>
+  const changeCredentials = async (payload) => {
+    const { data } = await api.put('/auth/credentials', payload)
+    localStorage.setItem('ars_admin_token', data.token)
+    setAdmin(data.admin)
+  }
+  return <AuthContext.Provider value={{ admin, loading, login, logout, changeCredentials }}>{children}</AuthContext.Provider>
 }
 export const useAuth = () => useContext(AuthContext)

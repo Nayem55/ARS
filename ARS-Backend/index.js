@@ -62,6 +62,22 @@ app.post('/api/auth/register', auth, async (req, res) => {
   try { await db.collection('admins').insertOne({ username: req.body.username, password: await bcrypt.hash(req.body.password, 10), createdAt: new Date() }); res.status(201).json({ ok: true }) } catch { res.status(409).json({ error: 'Username already exists' }) }
 })
 app.get('/api/auth/me', auth, (req, res) => res.json({ admin: req.admin }))
+app.put('/api/auth/credentials', auth, async (req, res) => {
+  const { currentPassword, username, newPassword } = req.body
+  if (!currentPassword) return res.status(400).json({ error: 'Current password is required' })
+  const admin = await db.collection('admins').findOne({ _id: new ObjectId(req.admin.id) })
+  if (!admin || !await bcrypt.compare(currentPassword, admin.password)) return res.status(401).json({ error: 'Current password is incorrect' })
+  const nextUsername = String(username || admin.username).trim()
+  if (!nextUsername) return res.status(400).json({ error: 'Username is required' })
+  if (newPassword && String(newPassword).length < 6) return res.status(400).json({ error: 'New password must contain at least 6 characters' })
+  const usedByAnotherAdmin = await db.collection('admins').findOne({ username: nextUsername, _id: { $ne: admin._id } })
+  if (usedByAnotherAdmin) return res.status(409).json({ error: 'That username is already in use' })
+  const changes = { username: nextUsername, updatedAt: new Date() }
+  if (newPassword) changes.password = await bcrypt.hash(newPassword, 10)
+  await db.collection('admins').updateOne({ _id: admin._id }, { $set: changes })
+  const token = jwt.sign({ id: admin._id.toString(), username: nextUsername }, JWT_SECRET, { expiresIn: '7d' })
+  res.json({ token, admin: { id: admin._id.toString(), username: nextUsername } })
+})
 
 app.get('/api/content', async (_, res) => res.json((await db.collection('siteSettings').findOne({ type: 'main' })) || {}))
 app.put('/api/content', auth, async (req, res) => {
