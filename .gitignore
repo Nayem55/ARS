@@ -1,0 +1,17 @@
+# Dependencies and generated bundles
+node_modules/
+dist/
+
+# Environment and local runtime data
+.env
+.env.local
+.env.*.local
+!*.env.example
+ARS-Backend/uploads/*
+!ARS-Backend/uploads/.gitkeep
+
+# Tooling and operating-system files
+.vite/
+*.log
+.DS_Store
+Thumbs.db

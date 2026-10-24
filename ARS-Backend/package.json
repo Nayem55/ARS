@@ -1,0 +1,16 @@
+{
+  "name": "ars-portfolio-api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "scripts": { "dev": "node --watch index.js", "start": "node index.js", "seed": "node index.js" },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^7.0.0",
+    "multer": "^2.0.2"
+  }
+}

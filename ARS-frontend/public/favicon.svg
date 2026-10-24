@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="12" fill="#14294F"/>
+  <path d="M12 46 L24 18 H31 L43 46 H35.5 L27.5 26.5 L19.5 46 Z" fill="#FFFFFF"/>
+  <polygon points="22.5,46 26,37.5 31.5,37.5 28,46" fill="#1E9E4A"/>
+  <text x="48" y="45" font-family="Arial, sans-serif" font-weight="800" font-size="22" fill="#FFFFFF" text-anchor="middle">S</text>
+</svg>
